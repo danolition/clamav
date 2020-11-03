@@ -19,6 +19,9 @@ RUN set -x \
         $CLAMD_DEPS \
     && chmod +x /usr/bin/ \
     && mkdir -p /var/lib/clamav \
+    && mkdir -p /usr/share/tomcat \
+    && mkdir /home \
+    && mkdir /tmp \
     && apk del .build-deps
 
 COPY usr/bin/crond.sh /usr/bin/cron
