@@ -1,10 +1,11 @@
-version: '3.1'
+version: '2.4'
 services:
   clamav:
     image: openbridge/clamav
     container_name: clamav
     ports:
       - 3310:3310
+    mem_limit: 800m
     tty: true
     restart: unless-stopped
     tmpfs: /var/cache
@@ -13,9 +14,6 @@ services:
       - /usr/share/tomcat:/usr/share/tomcat
       - /home:/home
       - /tmp:/tmp
-    resources:
-      limits:
-        memory: 800m
     ulimits:
       nproc: 65535
       nofile:
