@@ -13,10 +13,9 @@ services:
       - /usr/share/tomcat:/usr/share/tomcat
       - /home:/home
       - /tmp:/tmp
-    deploy:
-      resources:
-        limits:
-          memory: 800m
+    resources:
+      limits:
+        memory: 800m
     ulimits:
       nproc: 65535
       nofile:
