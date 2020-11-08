@@ -1,5 +1,5 @@
 FROM alpine:3.11
-MAINTAINER Thomas Spicer (thomas@openbridge.com)
+MAINTAINER Daniel Schwemmlein (dan@linuxhelp.today)
 
 ENV CLAMD_DEPS \
         git \
