@@ -5,24 +5,75 @@ We have paired Docker with ClamAV®. This delivers an easy to deploy open source
 
 The service runs `clamd` within a lightweight Alpine Linux Docker image. This provides a portable, flexible and scalable multi-threaded daemon, a command line scanner, builds with the current virus databases and runs `freshclam` in the background.
 
-# Usage
-First, you can build the image or pull it:
+# Prerequesites
+First we need to make sure that we have the docker repo:
+**On CentOS/Redhat:**
+$ sudo yum install -y yum-utils
+
+$ sudo yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo
+
+## Now you need to list the docker engine versions and pick version 17.12.0
+
+$ yum list docker-ce --showduplicates | sort -r
+
+docker-ce.x86_64  17.12.0.ce-1.el7.centos            @docker-ce-stable
+docker-ce.x86_64  18.06.1.ce-3.el7                   @docker-ce-stable
+docker-ce.x86_64  18.06.0.ce-3.el7                   @docker-ce-stable
+
+## Now version 17.12.0 needs to be installed
+
+$ sudo yum install docker-ce-17.12.0.ce-1.el7.centos docker-ce-cli-17.12.0.ce-1.el7.centos containerd.io
+
+## On Redhat/CentOS docker needs to be started now
+
+$ sudo systemctl start docker
+
+## At this point we would be ready to clone down the repo and run it
+
+**On Ubuntu:**
+$ sudo apt-get update
+
+$ sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+$ sudo apt-key fingerprint 0EBFCD88
+
+$ sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+
+## Now you need to list the docker engine versions and pick version 17.12.0
+
+$ apt-cache madison docker-ce
+
+  docker-ce | 5:18.09.1~3-0~ubuntu-xenial | https://download.docker.com/linux/ubuntu  xenial/stable amd64 Packages
+  docker-ce | 5:18.09.0~3-0~ubuntu-xenial | https://download.docker.com/linux/ubuntu  xenial/stable amd64 Packages
+  docker-ce | 17.12.0~ce~1-0~ubuntu       | https://download.docker.com/linux/ubuntu  xenial/stable amd64 Packages
+  docker-ce | 18.06.1~ce~3-0~ubuntu       | https://download.docker.com/linux/ubuntu  xenial/stable amd64 Packages
+  docker-ce | 18.06.0~ce~3-0~ubuntu       | https://download.docker.com/linux/ubuntu  xenial/stable amd64 Packages
+
+## Now version 17.12.0 needs to be installed
+
+$ sudo apt-get install docker-ce=17.12.0~ce~1-0~ubuntu docker-ce-cli=17.12.0~ce~1-0~ubuntu containerd.io
+
+# Cloning / Pulling repo
+Now, we can build the image or pull it:
 
 ### Get the image
+
+The recommended approach is to use the included Docker compose file:
 ```bash
-docker build -t openbridge/clamav .
-```
-The easier thing to do would be to pull it:
-```bash
-docker pull openbridge/clamav
-```
-### Starting your container
-Next, to run the image you can use:
-```bash
-docker run -d -p 3310:3310 openbridge/clamav
-```
- or via a simpler (recommended!) approach is to use the included Docker compose file:
-```bash
+git clone git clone https://github.com/danolition/clamav.git
+cd clamav/
 docker-compose up -d
 ```
 
@@ -34,9 +85,25 @@ volumes:
     driver: local
 ```
 
+# Usage
+
+the following directories will be paired as volumes with the docker container:
+/home
+/temp
+/usr/share/tomcat
+
+Now once you have brought the container up with docker-compose up -d , you can run the scans like this:
+
+$ docker exec -it clamav clamdscan /home
+$ docker exec -it clamav clamdscan /tmp
+
 # Configuration
 
-There are a few different configuration files. The principle is for `clamd` as it governs the core behavior of the service.
+The memory consumption of this container is limited to 800 MB. You can verify this once the container is running with the following command:
+
+$ docker ps -q | xargs docker stats --no-stream
+
+There are also a few different configuration files. The principle is for `clamd` as it governs the core behavior of the service.
 
 ## Clamd
 
