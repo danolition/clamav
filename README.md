@@ -95,16 +95,18 @@ the following directories will be paired as volumes with the docker container:
 /usr/share/tomcat
 
 Now once you have brought the container up with docker-compose up -d , you can run the scans like this:
-
+```bash
 $ docker exec -it clamav clamdscan /home
+# or add the remove option:
+$ docker exec -it clamav clamdscan --remove /usr/share/tomcat/
 $ docker exec -it clamav clamdscan /tmp
-
+```
 # Configuration
 
 The memory consumption of this container is limited to 800 MB. You can verify this once the container is running with the following command:
-
+```bash
 $ docker ps -q | xargs docker stats --no-stream
-
+```
 There are also a few different configuration files. The principle is for `clamd` as it governs the core behavior of the service.
 
 ## Clamd
@@ -384,7 +386,7 @@ Before you start to code, we recommend discussing your plans through a GitHub is
 
 # MIT License
 
-Copyright (c) 2018 tspicer
+Copyright (c) 2020 dan@linuxhelp.today
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
