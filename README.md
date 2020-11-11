@@ -8,31 +8,33 @@ The service runs `clamd` within a lightweight Alpine Linux Docker image. This pr
 # Prerequesites
 First we need to make sure that we have the docker repo:
 **On CentOS/Redhat:**
+```bash
 $ sudo yum install -y yum-utils
 
 $ sudo yum-config-manager \
     --add-repo \
     https://download.docker.com/linux/centos/docker-ce.repo
-
+```
 ## Now you need to list the docker engine versions and pick version 17.12.0
-
+```bash
 $ yum list docker-ce --showduplicates | sort -r
 
 docker-ce.x86_64  17.12.0.ce-1.el7.centos            @docker-ce-stable
 docker-ce.x86_64  18.06.1.ce-3.el7                   @docker-ce-stable
 docker-ce.x86_64  18.06.0.ce-3.el7                   @docker-ce-stable
-
+```
 ## Now version 17.12.0 needs to be installed
-
+```bash
 $ sudo yum install docker-ce-17.12.0.ce-1.el7.centos docker-ce-cli-17.12.0.ce-1.el7.centos containerd.io
-
+```
 ## On Redhat/CentOS docker needs to be started now
-
+```bash
 $ sudo systemctl start docker
-
+```
 ## At this point we would be ready to clone down the repo and run it
 
 **On Ubuntu:**
+```bash
 $ sudo apt-get update
 
 $ sudo apt-get install \
@@ -50,9 +52,9 @@ $ sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
-
+```
 ## Now you need to list the docker engine versions and pick version 17.12.0
-
+```bash
 $ apt-cache madison docker-ce
 
   docker-ce | 5:18.09.1~3-0~ubuntu-xenial | https://download.docker.com/linux/ubuntu  xenial/stable amd64 Packages
@@ -60,11 +62,11 @@ $ apt-cache madison docker-ce
   docker-ce | 17.12.0~ce~1-0~ubuntu       | https://download.docker.com/linux/ubuntu  xenial/stable amd64 Packages
   docker-ce | 18.06.1~ce~3-0~ubuntu       | https://download.docker.com/linux/ubuntu  xenial/stable amd64 Packages
   docker-ce | 18.06.0~ce~3-0~ubuntu       | https://download.docker.com/linux/ubuntu  xenial/stable amd64 Packages
-
+```
 ## Now version 17.12.0 needs to be installed
-
+```bash
 $ sudo apt-get install docker-ce=17.12.0~ce~1-0~ubuntu docker-ce-cli=17.12.0~ce~1-0~ubuntu containerd.io
-
+```
 # Cloning / Pulling repo
 Now, we can build the image or pull it:
 
