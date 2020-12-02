@@ -1,17 +1,16 @@
-version: '2.3'
+version: '3.1'
 services:
   clamav:
     image: openbridge/clamav
     container_name: clamav
     ports:
       - 3310:3310
-    mem_limit: 800m
     tty: true
     restart: unless-stopped
     tmpfs: /var/cache
     volumes:
       - clamd_data:/var/lib/clamav
-      - /usr/share/tomcat:/usr/share/tomcat
+      - /opt:/opt
       - /home:/home
       - /tmp:/tmp
     ulimits:
@@ -19,6 +18,14 @@ services:
       nofile:
           soft: 49999
           hard: 99999
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 500M
+        reservations:
+          cpus: '0.025'
+          memory: 250M
 volumes:
   clamd_data:
     driver: local

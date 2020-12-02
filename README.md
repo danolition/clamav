@@ -6,66 +6,16 @@ We have paired Docker with ClamAV®. This delivers an easy to deploy open source
 The service runs `clamd` within a lightweight Alpine Linux Docker image. This provides a portable, flexible and scalable multi-threaded daemon, a command line scanner, builds with the current virus databases and runs `freshclam` in the background.
 
 # Prerequesites
-First we need to make sure that we have the docker repo:
-**On CentOS/Redhat:**
+Here we can start by just installing docker and docker-compose:
+**On OpenSuse:**
 ```bash
-$ sudo yum install -y yum-utils
+$ sudo zypper install docker python3-docker-compose
 
-$ sudo yum-config-manager \
-    --add-repo \
-    https://download.docker.com/linux/centos/docker-ce.repo
-```
-## Now you need to list the docker engine versions and pick version 17.12.0
-```bash
-$ yum list docker-ce --showduplicates | sort -r
+$ sudo systemctl enable docker
 
-docker-ce.x86_64  17.12.0.ce-1.el7.centos            @docker-ce-stable
-docker-ce.x86_64  18.06.1.ce-3.el7                   @docker-ce-stable
-docker-ce.x86_64  18.06.0.ce-3.el7                   @docker-ce-stable
-```
-## Now version 17.12.0 needs to be installed
-```bash
-$ sudo yum install docker-ce-17.12.0.ce-1.el7.centos docker-ce-cli-17.12.0.ce-1.el7.centos containerd.io
-```
-## On Redhat/CentOS docker needs to be started now
-```bash
-$ sudo systemctl start docker
-```
-## At this point we would be ready to clone down the repo and run it
+$ sudo usermod -G docker -a $USER
 
-**On Ubuntu:**
-```bash
-$ sudo apt-get update
-
-$ sudo apt-get install \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg-agent \
-    software-properties-common
-
-$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-
-$ sudo apt-key fingerprint 0EBFCD88
-
-$ sudo add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-   $(lsb_release -cs) \
-   stable"
-```
-## Now you need to list the docker engine versions and pick version 17.12.0
-```bash
-$ apt-cache madison docker-ce
-
-  docker-ce | 5:18.09.1~3-0~ubuntu-xenial | https://download.docker.com/linux/ubuntu  xenial/stable amd64 Packages
-  docker-ce | 5:18.09.0~3-0~ubuntu-xenial | https://download.docker.com/linux/ubuntu  xenial/stable amd64 Packages
-  docker-ce | 17.12.0~ce~1-0~ubuntu       | https://download.docker.com/linux/ubuntu  xenial/stable amd64 Packages
-  docker-ce | 18.06.1~ce~3-0~ubuntu       | https://download.docker.com/linux/ubuntu  xenial/stable amd64 Packages
-  docker-ce | 18.06.0~ce~3-0~ubuntu       | https://download.docker.com/linux/ubuntu  xenial/stable amd64 Packages
-```
-## Now version 17.12.0 needs to be installed
-```bash
-$ sudo apt-get install docker-ce=17.12.0~ce~1-0~ubuntu docker-ce-cli=17.12.0~ce~1-0~ubuntu containerd.io
+$ sudo systemctl restart docker
 ```
 # Cloning / Pulling repo
 Now, we can build the image or pull it:
@@ -74,7 +24,7 @@ Now, we can build the image or pull it:
 
 The recommended approach is to use the included Docker compose file:
 ```bash
-git clone git clone https://github.com/danolition/clamav.git
+git clone -b opensuse https://github.com/danolition/clamav.git
 cd clamav/
 docker-compose up -d
 ```
@@ -92,18 +42,18 @@ volumes:
 the following directories will be paired as volumes with the docker container:
 /home
 /temp
-/usr/share/tomcat
+/opt
 
 Now once you have brought the container up with docker-compose up -d , you can run the scans like this:
 ```bash
 $ docker exec -it clamav clamdscan /home
 # or add the remove option:
-$ docker exec -it clamav clamdscan --remove /usr/share/tomcat/
+$ docker exec -it clamav clamdscan --remove /opt
 $ docker exec -it clamav clamdscan /tmp
 ```
 # Configuration
 
-The memory consumption of this container is limited to 800 MB. You can verify this once the container is running with the following command:
+The memory consumption of this container is limited to 500 MB. You can verify this once the container is running with the following command:
 ```bash
 $ docker ps -q | xargs docker stats --no-stream
 ```

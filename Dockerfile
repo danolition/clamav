@@ -19,7 +19,7 @@ RUN set -x \
         $CLAMD_DEPS \
     && chmod +x /usr/bin/ \
     && mkdir -p /var/lib/clamav \
-    && mkdir -p /usr/share/tomcat \
+    && mkdir /opt \
     && mkdir /home \
     && mkdir /tmp \
     && apk del .build-deps
