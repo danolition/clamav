@@ -18,14 +18,6 @@ services:
       nofile:
           soft: 49999
           hard: 99999
-    deploy:
-      resources:
-        limits:
-          cpus: '0.25'
-          memory: 500M
-        reservations:
-          cpus: '0.025'
-          memory: 250M
 volumes:
   clamd_data:
     driver: local

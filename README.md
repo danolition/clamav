@@ -53,11 +53,9 @@ $ docker exec -it clamav clamdscan /tmp
 ```
 # Configuration
 
-The memory consumption of this container is limited to 500 MB. You can verify this once the container is running with the following command:
-```bash
-$ docker ps -q | xargs docker stats --no-stream
-```
-There are also a few different configuration files. The principle is for `clamd` as it governs the core behavior of the service.
+Other than on Ubuntu/Debian or Centos/RedHat systems, memory consumption can not be effectively limited. The reason is that Docker Engine version 17.12 is not available on OpenSuse. Only the very latest Docker Engine version can be installed at the moment.
+
+There are a few different configuration files. The principle is for `clamd` as it governs the core behavior of the service.
 
 ## Clamd
 
